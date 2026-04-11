@@ -1,0 +1,31 @@
+# Entornos virtuales
+.venv/
+venv/
+env/
+bin/
+lib/
+
+# Python bytecode
+**/__pycache__/
+*.py[cod]
+*$py.class
+
+# Configuración y Secretos
+.env
+
+# Tests y Cobertura
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Linters y Tipado
+.mypy_cache/
+.ruff_cache/
+.pyre/
+
+# Logs
+*.log
+
+# Bases de Datos locales (ej. SQLite)
+*.sqlite3
+*.db
