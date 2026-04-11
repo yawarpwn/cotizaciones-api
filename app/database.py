@@ -7,16 +7,7 @@
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
-from dotenv import load_dotenv
-import os
-
-# load_dotenv() lee el archivo .env y carga las variables
-# de entorno para que os.getenv() pueda acceder a ellas
-load_dotenv()
-
-# Leemos la URL de conexión desde el archivo .env
-# Formato: postgresql://usuario:contraseña@host:puerto/nombre_db
-DATABASE_URL = os.getenv("DATABASE_URL")
+from core.config import DATABASE_URL
 
 # El "engine" es el motor de conexión a la base de datos.
 # Es el objeto principal que SQLAlchemy usa para comunicarse con PostgreSQL.
