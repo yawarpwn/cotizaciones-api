@@ -2,24 +2,20 @@
 .venv/
 venv/
 env/
-bin/
-lib/
 
-# Python bytecode
+# Python cache
 __pycache__/
-**/__pycache__/
 *.py[cod]
-*$py.class
 
-# Configuración y Secretos
+# Configuración
 .env
 
-# Tests y Cobertura
+# Testing
 .pytest_cache/
 .coverage
 htmlcov/
 
-# Linters y Tipado
+# Linters
 .mypy_cache/
 .ruff_cache/
 .pyre/
@@ -27,6 +23,6 @@ htmlcov/
 # Logs
 *.log
 
-# Bases de Datos locales (ej. SQLite)
+# DB local
 *.sqlite3
 *.db
