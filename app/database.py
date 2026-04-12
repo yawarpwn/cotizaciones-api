@@ -7,7 +7,7 @@
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
-from core.config import DATABASE_URL
+from app.core.config import DATABASE_URL
 
 # El "engine" es el motor de conexión a la base de datos.
 # Es el objeto principal que SQLAlchemy usa para comunicarse con PostgreSQL.

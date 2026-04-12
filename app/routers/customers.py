@@ -2,6 +2,8 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from typing import List
 
+from app.core.dependencies import get_current_user
+from app.models.user import User
 from app.database import get_db  # La función que nos da la sesión DB
 from app.models.customer import Customer
 from app.schemas.customer import (  # Los schemas de validación
@@ -17,10 +19,7 @@ router = APIRouter(prefix="/customers", tags=["Customers"])
 
 
 # ============================================================
-# POST /clientes/ - Crear un nuevo cliente
-# ============================================================
-# - response_model=CustomerResponse : define qué devuelve el endpoint
-# - status_code=201 : código HTTP para "creado exitosamente"
+# POST /customers/ - Crear un nuevo cliente
 # ============================================================
 @router.post("/", response_model=CustomerResponse, status_code=201)
 def create_customer(
@@ -34,8 +33,6 @@ def create_customer(
     exists = db.query(Customer).filter(Customer.email == cliente.email).first()
 
     if exists:
-        # HTTPException devuelve un error HTTP al cliente
-        # status_code=400 significa "Bad Request" (petición incorrecta)
         raise HTTPException(status_code=400, detail="El email ya está registrado")
 
     # cliente.model_dump() convierte el schema Pydantic a un diccionario:
@@ -52,15 +49,18 @@ def create_customer(
 
 
 # ============================================================
-# GET /clientes/ - Listar todos los clientes
+# GET /customers/ - Listar todos los clientes
 # ============================================================
 # - skip  : cuántos registros saltar (para paginación)
 # - limit : cuántos registros devolver como máximo
-# Ejemplo: GET /clientes/?skip=0&limit=10 → primera página
-#          GET /clientes/?skip=10&limit=10 → segunda página
 # ============================================================
 @router.get("/", response_model=List[CustomerResponse])
-def list_customers(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
+def list_customers(
+    skip: int = 0,
+    limit: int = 100,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
     # SELECT * FROM clientes OFFSET skip LIMIT limit
     customers = db.query(Customer).offset(skip).limit(limit).all()
     return customers
@@ -68,9 +68,6 @@ def list_customers(skip: int = 0, limit: int = 100, db: Session = Depends(get_db
 
 # ============================================================
 # GET /clientes/{customer_id} - Obtener un cliente por su ID
-# ============================================================
-# {customer_id} es un parámetro dinámico en la URL.
-# Ejemplo: GET /clientes/5 → busca el cliente con id=5
 # ============================================================
 @router.get("/{customer_id}", response_model=CustomerResponse)
 def get_customer(
@@ -88,10 +85,7 @@ def get_customer(
 
 
 # ============================================================
-# PUT /clientes/{customer_id} - Actualizar un cliente
-# ============================================================
-# Recibe solo los campos que se quieren actualizar.
-# Si no se envía un campo, se deja como está.
+# PUT /customers/{customer_id} - Actualizar un cliente
 # ============================================================
 @router.put("/{customer_id}", response_model=CustomerResponse)
 def update_customer(
@@ -118,7 +112,7 @@ def update_customer(
 
 
 # ============================================================
-# DELETE /clientes/{customer_id} - Eliminar un cliente
+# DELETE /customers/{customer_id} - Eliminar un cliente
 # ============================================================
 # status_code=204 significa "No Content" (éxito sin respuesta)
 # ============================================================

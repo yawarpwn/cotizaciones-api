@@ -2,6 +2,7 @@ from fastapi import FastAPI
 
 from app.database import Base, engine  # Para crear las tablas
 from app.routers import customers  # El router de clientes
+from app.routers import auth
 
 # Base.metadata.create_all() lee todos los modelos que heredan de Base
 # y crea sus tablas en PostgreSQL si aún no existen.
@@ -17,6 +18,7 @@ app = FastAPI(
 
 # Registramos el routers a la app principal.
 app.include_router(customers.router)
+app.include_router(auth.router)
 
 
 # Endpoint raíz para verificar que la API está funcionando
